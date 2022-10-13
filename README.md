@@ -3,7 +3,7 @@
 Usage:  
 $ cd [app_dir]  
 $ php artisan serve  
-$ php arrisan queue:work  
+$ php artisan queue:work  
   
 @Browser  
 http://[localhost]:8000/  
