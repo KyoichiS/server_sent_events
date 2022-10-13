@@ -34,8 +34,7 @@ class IndexController extends Controller
             "phone_number" => 'xxx-xxxx-xxxx',
         ]);
 */
-
-        return view('error');
+        return;
     }
 }
 
