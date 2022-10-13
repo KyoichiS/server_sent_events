@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use DateTime;
 use DateTimeZone;
-use Illuminate\Support\Facades\Log;
+use App\Http\Requests\SseRequest;
 
 class SseController extends Controller
 {
     //
     public function getProgress(Request $req){
-        Log::debug("SseController::getProgress");
-
+        $requestid = $req->input('requestid');
+        Log::debug("SseController::getProgress[" . $requestid . "]");
         /*
         $ary = [
                  ['name' => 'john'],
@@ -29,19 +30,19 @@ class SseController extends Controller
         while(true) {
             switch($count){
                 case 1:
-                    $progress_message = '初期化１';
+                    $progress_message = '初期化１' . "[" . $requestid . "]";
                     break;
                 case 2:
-                    $progress_message = '処理時間計算中2';
+                    $progress_message = '処理時間計算中2' . "[" . $requestid . "]";
                     break;
                 case 3:
-                    $progress_message = 'ファイル作成中3';
+                    $progress_message = 'ファイル作成中3' . "[" . $requestid . "]";
                     break;
                 case 4:
-                    $progress_message = 'ファイル作成中4';
+                    $progress_message = 'ファイル作成中4' . "[" . $requestid . "]";
                     break;
                 case 5:
-                    $progress_message = '処理完了5';
+                    $progress_message = '処理完了5' . "[" . $requestid . "]";
                     break;
                 default:
                     //$progress_message = '';

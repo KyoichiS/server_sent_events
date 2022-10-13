@@ -10,23 +10,23 @@ btnStart.addEventListener('click',function(e){
 //
 var xhr = new XMLHttpRequest();
  function funcSubmit(){
-    xhr.open( 'post', 'http://192.168.2.114:8000/',true);  
+    xhr.open( 'post', '/',true);
     xhr.responseType="text";
     xhr.timeout = 1000 * 60 * 30 ;
     var frmData = new FormData(document.getElementById("frmInput"));
-    xhr.send(frmData);    
+    xhr.send(frmData);
 }
 xhr.addEventListener('readystatechange', function(e) {
     e.preventDefault();
 
     if(xhr.readyState === 4 && xhr.status === 200) {
         //screenUnLock();
-    
+
         //fileUrl = window.URL.createObjectURL(xhr.response)
         //window.open(fileUrl,"_self");
-        console.log(xhr.status);
+        console.log('サーバからのrequestid:' + xhr.responseText);
         //ここに来るまでは、固定でメッセージを出しておく。
-        receiveMessage();
+        receiveMessage(xhr.responseText);  //return requestid
     }else {
         console.log("通信中…[" + xhr.readyState + "] [" + xhr.status + "]");
     }
@@ -40,13 +40,15 @@ xhr.onerror = function() {
 
 //
 var txtServerMessage = document.getElementById('txtServerMessage');
-function receiveMessage(){
-    es = new EventSource('/sse');
+function receiveMessage(requestid){
+    console.log("receiveMessage [" + requestid + "]");
+    var eventURL = '/sse?requestid=' + requestid;
+    es = new EventSource(eventURL);
     es.addEventListener('message', e => {
         const { time, word } = JSON.parse(e.data);
         console.log('サーバからの受信 ' + `${time} ${word}`);
         //sample.appendChild(document.createElement('li')).textContent  = 'サーバからの受信 ' + `${time} ${word}`;
-        txtServerMessage.value = "サーバからの受信 " + `${time} ${word}`;
+        txtServerMessage.value = "サーバからの受信 " + `${time} ${word}` + " requestid:" + requestid;
     });
     es.addEventListener('error',e =>{
         console.log('サーバからエラー 。正常終了もここを通る。');
@@ -58,7 +60,7 @@ function receiveMessage(){
  * ScreenLook
  */
  function screenLock(){
-    var sl = document.createElement("div"); 
+    var sl = document.createElement("div");
     sl.id = "screenlock";
     sl.style.height = '100%';
     sl.style.left = '0px';
@@ -68,14 +70,14 @@ function receiveMessage(){
     sl.style.zIndex = '9998';
     sl.style.backgroundColor = '#c0c0c0'; //darkgray
     sl.style.opacity = '50%';
-   
+
     var objBody = document.querySelector("body");
     objBody.appendChild(sl);
 
     var divSpinner = document.getElementById("spinner");
     divSpinner.classList.toggle("hidden");
 }
-  
+
 /**
 * ScreenUnLook
 */
@@ -86,4 +88,3 @@ function screenUnLock(){
     var sl = document.getElementById("screenlock");
     sl.parentNode.removeChild(sl);
 }
-  

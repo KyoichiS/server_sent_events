@@ -14,7 +14,7 @@ btnStart.addEventListener('click', function (e) {
 //
 var xhr = new XMLHttpRequest();
 function funcSubmit() {
-  xhr.open('post', 'http://192.168.2.114:8000/', true);
+  xhr.open('post', '/', true);
   xhr.responseType = "text";
   xhr.timeout = 1000 * 60 * 30;
   var frmData = new FormData(document.getElementById("frmInput"));
@@ -27,9 +27,9 @@ xhr.addEventListener('readystatechange', function (e) {
 
     //fileUrl = window.URL.createObjectURL(xhr.response)
     //window.open(fileUrl,"_self");
-    console.log(xhr.status);
+    console.log('サーバからのrequestid:' + xhr.responseText);
     //ここに来るまでは、固定でメッセージを出しておく。
-    receiveMessage();
+    receiveMessage(xhr.responseText); //return requestid
   } else {
     console.log("通信中…[" + xhr.readyState + "] [" + xhr.status + "]");
   }
@@ -44,15 +44,17 @@ xhr.onerror = function () {
 
 //
 var txtServerMessage = document.getElementById('txtServerMessage');
-function receiveMessage() {
-  es = new EventSource('/sse');
+function receiveMessage(requestid) {
+  console.log("receiveMessage [" + requestid + "]");
+  var eventURL = '/sse?requestid=' + requestid;
+  es = new EventSource(eventURL);
   es.addEventListener('message', function (e) {
     var _JSON$parse = JSON.parse(e.data),
       time = _JSON$parse.time,
       word = _JSON$parse.word;
     console.log('サーバからの受信 ' + "".concat(time, " ").concat(word));
     //sample.appendChild(document.createElement('li')).textContent  = 'サーバからの受信 ' + `${time} ${word}`;
-    txtServerMessage.value = "サーバからの受信 " + "".concat(time, " ").concat(word);
+    txtServerMessage.value = "サーバからの受信 " + "".concat(time, " ").concat(word) + " requestid:" + requestid;
   });
   es.addEventListener('error', function (e) {
     console.log('サーバからエラー 。正常終了もここを通る。');
