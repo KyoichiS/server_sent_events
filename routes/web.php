@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\SseController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+/*
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
+*/
+
+Route::get('/',[IndexController::class,'index']);
+Route::post('/',[IndexController::class,'execute']);
+
+Route::get('/sse',[SseController::class,'getProgress']);
