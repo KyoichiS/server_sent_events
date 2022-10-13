@@ -6,7 +6,7 @@ $ php artisan serve
 $ php arrisan queue:work  
   
 @Browser  
-http://[localhost]/  
+http://[localhost]:8000/  
 (click start button)   
 
 <hr> 
