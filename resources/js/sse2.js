@@ -3,7 +3,8 @@ var es;
 
 btnStart.addEventListener('click',function(e){
     e.preventDefault();
-    //screenLock();
+    screenLock();
+
     funcSubmit();
 });
 
@@ -27,6 +28,7 @@ async function funcSubmit(){
         receiveMessage(requestid);
     }
     catch(error){
+        screenUnLock();
         console.log("error:");
     }
 }
@@ -77,6 +79,7 @@ async function receiveMessage(requestid){
         txtServerMessage.value = "サーバからの受信 " + `${time} ${word}` + " requestid:" + requestid;
     });
     es.addEventListener('error',e =>{
+        screenUnLock();
         console.log('サーバからエラー 。正常終了もここを通る。');
         es.close();
     })

@@ -11,7 +11,7 @@ var btnStart = document.getElementById('btnStart');
 var es;
 btnStart.addEventListener('click', function (e) {
   e.preventDefault();
-  //screenLock();
+  screenLock();
   funcSubmit();
 });
 
@@ -80,13 +80,14 @@ function _funcSubmit() {
             requestid = _context.sent.toString();
             console.log(requestid);
             receiveMessage(requestid);
-            _context.next = 18;
+            _context.next = 19;
             break;
           case 15:
             _context.prev = 15;
             _context.t0 = _context["catch"](0);
+            screenUnLock();
             console.log("error:");
-          case 18:
+          case 19:
           case "end":
             return _context.stop();
         }
@@ -120,6 +121,7 @@ function _receiveMessage() {
               txtServerMessage.value = "サーバからの受信 " + "".concat(time, " ").concat(word) + " requestid:" + requestid;
             });
             es.addEventListener('error', function (e) {
+              screenUnLock();
               console.log('サーバからエラー 。正常終了もここを通る。');
               es.close();
             });
