@@ -8,6 +8,31 @@ btnStart.addEventListener('click',function(e){
 });
 
 //
+async function funcSubmit(){
+    try{
+        let token = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        let txtInput = document.querySelector('#textName');
+
+        let frmData = new FormData();
+        frmData.append('textName',txtInput.value);
+        let res = await fetch('/',{
+            method : 'post',
+            headers: {
+                'X-CSRF-TOKEN': token,
+            },
+            body : frmData,
+        });
+        requestid = ( await res.text()).toString();
+        console.log(requestid);
+        receiveMessage(requestid);
+    }
+    catch(error){
+        console.log("error:");
+    }
+}
+
+/*
+/////////////////
 var xhr = new XMLHttpRequest();
  function funcSubmit(){
     xhr.open( 'post', '/',true);
@@ -37,10 +62,11 @@ xhr.onerror = function() {
     //screenUnLock();
     console.log("Eerror!");
 }
+*/
 
 //
 var txtServerMessage = document.getElementById('txtServerMessage');
-function receiveMessage(requestid){
+async function receiveMessage(requestid){
     console.log("receiveMessage [" + requestid + "]");
     var eventURL = '/sse?requestid=' + requestid;
     es = new EventSource(eventURL);

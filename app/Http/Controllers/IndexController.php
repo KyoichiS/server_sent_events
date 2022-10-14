@@ -22,20 +22,21 @@ class IndexController extends Controller
 
         $form_data = $request->all();
         //dd($request->input('textName'));
-        Log::info("IndexController:execute" . $form_data["textName"]);
+        Log::info("IndexController:execute [" . $form_data["textName"] . "]");
 
         //Initial(read files....)
-        sleep(5);
+        sleep(3);
+
+        //throw new Exception('500 error');
 
         //send message  //execute Heavy Task
-/*
+        $uniqid = uniqid();
         HeavyTaskJob::dispatch([
-            "id" => 123,
-            "phone_number" => 'xxx-xxxx-xxxx',
+            "id" => $uniqid,
+            "text" => $form_data["textName"]
         ]);
-*/
 
-        echo uniqid();
+        echo $uniqid;
     }
 }
 
